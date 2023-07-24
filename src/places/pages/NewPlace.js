@@ -2,7 +2,9 @@ import React from "react";
 
 const NewPlace = () =>{
     return(
-        <h1>New Place Works!!!</h1>
+        <form className="place-form">
+            {/* <Input type="text" label="Title" /> */}
+        </form>
     )
 }
 
