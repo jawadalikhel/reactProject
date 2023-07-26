@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from "../../shared/util/validators";
 import { useForm } from "../../shared/hooks/form-hook";
 
@@ -6,9 +6,11 @@ import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
 import Card from "../../shared/components/UIElements/Card";
 
+import { AuthContext } from "../../shared/context/auth-context";
 import "./styles/Auth.css";
 
 const Auth = () =>{
+    const auth = useContext(AuthContext);
     // State to manage whether the user is in login mode or signup mode
     const [isLoginMode, setIsLoginMode] = useState(true);
 
@@ -47,6 +49,7 @@ const Auth = () =>{
     const authSubmitHandler = (event) =>{
         event.preventDefault();
         console.log(formState.inputs, "<--- form submit") // send this to backend
+        auth.login();
     }
     return(
         <Card className="authentication">

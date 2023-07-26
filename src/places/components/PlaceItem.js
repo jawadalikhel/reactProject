@@ -1,16 +1,20 @@
 // Importing necessary modules from React and custom components
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
 
 import Button from "../../shared/components/FormElements/Button";
 import Card from "../../shared/components/UIElements/Card";
 import Modal from "../../shared/components/UIElements/Modal";
 import Map from "../../shared/components/UIElements/Map";
 
+import { AuthContext } from "../../shared/context/auth-context";
+
 // Importing CSS styles for the component
 import "./styles/PlaceItem.css"
 
 //component "PlaceItem" takes props as input
 const PlaceItem = (props) =>{
+    const auth = useContext(AuthContext);
+
     // Using the React Hook "useState" to create two state variables: "showMap" and "showConfirmModal"
     const [showMap, setShowMap] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -89,8 +93,8 @@ const PlaceItem = (props) =>{
                     </div>
                     <div className="place-item_actions">
                         <Button inverse onClick={openMapHandler}>VIEW ON MAP</Button>
-                        <Button to={`/places/${props.id}`}>EDIT</Button>
-                        <Button danger onClick={showDeleteWarningHandler}>DELETE</Button>
+                        {auth.isLoggedIn ? <Button to={`/places/${props.id}`}>EDIT</Button> : null}
+                        {auth.isLoggedIn ? <Button danger onClick={showDeleteWarningHandler}>DELETE</Button> : null}
                     </div>
                 </Card>
             </li>
