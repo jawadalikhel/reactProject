@@ -1,67 +1,40 @@
-import React, {useCallback, useReducer} from "react";
+// Importing necessary modules, components, and custom validators
+import React from "react";
 import {VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE} from "../../shared/util/validators";
 import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
+import { useForm } from "../../shared/hooks/form-hook";
+// Importing CSS styles for the component
+import "./styles/PlaceForm.css";
 
-import "./styles/NewPlace.css";
-
-const formReducer = (state, action) =>{
-    switch(action.type){
-        case 'INPUT_CHANGE':
-            let formIsValid = true;
-            for(const inputId in state.inputs){
-                if(inputId === action.inputId){
-                    formIsValid = formIsValid && action.isValid;
-                }else{
-                    formIsValid = formIsValid && state.inputs[inputId].isValid;
-                }
-            }
-            return{
-                ...state,
-                inputs: {
-                    ...state.inputs,
-                    [action.inputId]: {
-                        value: action.value,
-                        isValid: action.isValid
-                    }
-                },
-                isValid: formIsValid
-            };
-        default:
-            return state;
-    }
-}
 const NewPlace = () =>{
-
-    const [formState, dispatch] = useReducer(formReducer, {
-        inputs: {
-            title: {
-                value: '',
-                isValid: false
-            },
-            description: {
-                value: '',
-                isValid: false
-            }
+    // Using the custom form hook "useForm" to manage the form state and input handling
+    const [formState, inputHandler] = useForm({
+        title: {
+            value: '',
+            isValid: false
         },
-        isValid: false
-    });
+        description: {
+            value: '',
+            isValid: false
+        },
+        address: {
+            value: '',
+            isValid: false
+        },
+    }, false)
 
-    const inputHandler = useCallback((id, value, isValid) =>{
-        dispatch({
-            type: 'INPUT_CHANGE',
-            value: value, 
-            isValid: isValid, 
-            inputId: id
-        })
-    },[]); // useCallback is a react Hook
+    // Handler function for the form submission
+    const placeSubmitHandler = (event) =>{
+        event.preventDefault();
+        console.log(formState.inputs, "<--- form submit") // send this to backend
+    };
 
     return(
-        <form className="place-form">
+        <form className="place-form" onSubmit={placeSubmitHandler}>
             <Input 
                 id="title"
                 element="input" 
-                type="text" 
                 label="Title" 
                 validators={[VALIDATOR_REQUIRE()]} // here we want to check the value the user entered is not empty .1
                 errorText="Please enter a valid title"
@@ -70,10 +43,18 @@ const NewPlace = () =>{
              <Input 
                 id="description"
                 element="textarea" 
-                type="textarea" 
                 label="Description" 
                 validators={[VALIDATOR_MINLENGTH(5)]} // here we want to check the value the user entered is not empty .1
                 errorText="Please enter a valid description (at leat 5 characters)"
+                onInput={inputHandler}
+            />
+
+            <Input 
+                id="address"
+                element="input" 
+                label="Address" 
+                validators={[VALIDATOR_REQUIRE()]} // here we want to check the value the user entered is not empty .1
+                errorText="Please enter a valid address."
                 onInput={inputHandler}
             />
             <Button type="submit" disabled={!formState.isValid}>ADD PLACE</Button>

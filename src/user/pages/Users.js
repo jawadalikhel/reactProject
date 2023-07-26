@@ -11,6 +11,7 @@ const Users = () =>{
         }
     ]
     return(
+        // Render the UsersList component and pass the USERS array as the items prop
         <UsersList items={USERS}/>
     )
 }

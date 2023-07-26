@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import './styles/Button.css';
 
 const Button = props => {
+  // If the "href" prop is provided, render an anchor (a) tag as the button
   if (props.href) {
     return (
       <a
@@ -15,6 +16,7 @@ const Button = props => {
       </a>
     );
   }
+  // If the "to" prop is provided, render a "Link" component from "react-router-dom" as the button
   if (props.to) {
     return (
       <Link
@@ -27,6 +29,7 @@ const Button = props => {
       </Link>
     );
   }
+  // If neither "href" nor "to" prop is provided, render a regular button
   return (
     <button
       className={`button button--${props.size || 'default'} ${props.inverse &&
